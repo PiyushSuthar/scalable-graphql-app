@@ -1,12 +1,13 @@
 import { Author, WorksAt } from "../../../db/models";
 
 const authorMutations = {
-    createAuthor: async (_, { author }) => {
+    createAuthor: async (_, { author }, { loaders }) => {
         const newAuthor = new Author(author)
 
-        return newAuthor.save()
+        const savedAuthor = await newAuthor.save()
+        return loaders.author.one(savedAuthor._id)
     },
-    updateAuthor: async (_, { id, author }) => {
+    updateAuthor: async (_, { id, author }, { loaders }) => {
         const updatedAuthor = await Author.findByIdAndUpdate(
             id,
             {
@@ -17,10 +18,10 @@ const authorMutations = {
             }
         )
 
-        return updatedAuthor
+        return loaders.author.one(id)
     },
 
-    addAuthorToPublisher: async (_, { id, publisher }) => {
+    addAuthorToPublisher: async (_, { id, publisher }, { loaders }) => {
         const author = await Author.findById(id)
 
         if (author) {
@@ -31,7 +32,7 @@ const authorMutations = {
             await newWorksAt.save()
         }
 
-        return author
+        return loaders.author.one(id)
     }
 }
 

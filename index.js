@@ -7,7 +7,7 @@ const start = async () => {
 
         console.log(`Connecting to Database`)
         await connectDB()
-        console.log(`Connecting to Database`)
+        console.log(`Connected to Database`)
 
         await app.listen(port)
         console.log(`🚀  GraphQL server running at port: ${port}`)
